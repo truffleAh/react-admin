@@ -14,9 +14,9 @@
 ## 3.git 管理项目
 
 (1).创建远程仓库
-(2).创建本地仓库：配置.gitignore，git init，git add，git commit -m 'init'
-(3).将本地仓库推送到远程仓库：git remote add origin url，git push origin master
-(4).新同事--克隆仓库：git clone url，git checkout -b dev origin/dev，git pull origin dev
+(2).创建本地仓库：配置.gitignore
+(3).将本地仓库推送到远程仓库：git push
+(4).新同事--克隆仓库：git clone url，git pull
 
 ## 4.创建项目基本结构
 
