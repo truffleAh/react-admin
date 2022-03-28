@@ -6,7 +6,7 @@ import "antd/dist/antd.less"; //引入antd样式,注意自定义主题要将后�
 import storageUtils from "./utils/storageUtils";
 import memoryUtils from "./utils/memoryUtils";
 /* 应用的入口文件 */
-//读取local中的user，保存到内存中
+//读取local中的user,保存到内存中
 const user = storageUtils.getUser();
 memoryUtils.user = user;
 
