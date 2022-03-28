@@ -3,7 +3,7 @@ import { Redirect } from "react-router-dom";
 import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import "./css/login.less";
-import logo from "./imgs/logo.png"; //注意jsx中引入图片的方式
+import logo from "../../assets/imgs/logo.png"; //注意jsx中引入图片的方式
 import { reqLogin } from "../../api";
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
