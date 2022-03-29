@@ -38,11 +38,18 @@ class LeftNav extends Component {
       }
     });
   };
+  /* 在第一次render()之前执行一次
+  为第一个render()准备数据(必须同步的) */
+  constructor(props) {
+    super(props);
+    this.menuNodes = this.getMenuNodes(menuList);
+  }
+
   render() {
     // debugger
     //得到当前请求的路由路径,实现刷新时依然自动选中当前菜单项
     const path = this.props.location.pathname;
-    // const openKey = this.openKey;
+    const openKey = this.openKey;
 
     return (
       <div>
@@ -55,9 +62,9 @@ class LeftNav extends Component {
             mode="inline"
             theme="dark"
             selectedKeys={[path]}
-            defaultOpenKeys={[this.openKey]}
+            defaultOpenKeys={[openKey]}
           >
-            {this.getMenuNodes(menuList)}
+            {this.menuNodes}
           </Menu>
         </div>
       </div>
