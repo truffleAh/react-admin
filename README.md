@@ -1,22 +1,22 @@
-# 项目踩坑经验
+## 项目踩坑经验
 
 课程地址：https://www.bilibili.com/video/BV1i4411N7Qc
 
-## 1.引入 antd 组件 Form 无样式：忘记在入口文件 index.js 中导入 antd 的样式
+### 1.引入 antd 组件 Form 无样式：忘记在入口文件 index.js 中导入 antd 的样式
 
 ```js
 import "antd/dist/antd.less";
 ```
 
-## 2.报错 import in body of module;reorder to top.(import/first)：import 语句置顶，不能位于其他代码下面
+### 2.报错 import in body of module;reorder to top.(import/first)：import 语句置顶，不能位于其他代码下面
 
-## 3.react 脚手架配置代理：编写 setupProxy.js 配置具体代理规则,确保灵活性.而不是在 package.json 中写死"proxy":url
+### 3.react 脚手架配置代理：编写 setupProxy.js 配置具体代理规则,确保灵活性.而不是在 package.json 中写死"proxy":url
 
-## 4.JS 正则表达式：快速入门(https://blog.csdn.net/void_fan/article/details/109769551)
+### 4.JS 正则表达式：快速入门(https://blog.csdn.net/void_fan/article/details/109769551)
 
-## 5.路由链接(Link)与注册路由(Route)一一对应
+### 5.路由链接(Link)与注册路由(Route)一一对应
 
-## 6.在 LeftNav 组件，用 antd 的 menu 组件实现目录和二级目录以及刷新后选中目录依然保持选中功能的实现：(1).参考官方文档 (2).注意用 constructor(){} 钩子函数【componentWillMount 钩子函数 即将弃用】导入 munuList，若不导入将无法实现刷新后选中的二级目录不展开的问题
+### 6.在 LeftNav 组件，用 antd 的 menu 组件实现目录和二级目录以及刷新后选中目录依然保持选中功能的实现：(1).参考官方文档 (2).注意用 constructor(){} 钩子函数【componentWillMount 钩子函数 即将弃用】导入 munuList，若不导入将无法实现刷新后选中的二级目录不展开的问题
 
 ```js
 /* 在第一次render()之前执行一次
@@ -27,11 +27,11 @@ import "antd/dist/antd.less";
   }
 ```
 
-## 7.注意组件类名别重复，否则样式会覆盖
+### 7.注意组件类名别重复，否则样式会覆盖
 
-## 8.在 header 组件中，使用高德地图 API(使用高德开放平台https://lbs.amap.com/api/webservice/guide/api/ipconfig)，申请key的时候注意 服务平台选 web 服务 而不要选 web 端，使用 ip 定位以及天气查询 API
+### 8.在 header 组件中，使用高德地图 API(使用高德开放平台https://lbs.amap.com/api/webservice/guide/api/ipconfig)，申请key的时候注意 服务平台选 web 服务 而不要选 web 端，使用 ip 定位以及天气查询 API
 
-## 9.在 header 组件中，得不到天气数据：跨域问题 -- 引入第三方库 jsonp
+### 9.在 header 组件中，得不到天气数据：跨域问题 -- 引入第三方库 jsonp
 
 ```js
 以下代码位于src / api / index.js;
