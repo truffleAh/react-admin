@@ -27,8 +27,6 @@ export const reqIP = () => {
     });
   });
 };
-// export const reqIP = (data) =>
-//   ajax("https://restapi.amap.com/v3/ip?output=json", data);
 
 //根据IP地址获取天气信息
 export const reqWeather = (city) => {
@@ -37,7 +35,7 @@ export const reqWeather = (city) => {
     //发送jsonp请求
     jsonp(url, {}, (err, data) => {
       console.log("Weather jsonp():", err, data);
-      if (!err && data.status == "1") {
+      if (!err && data.status === "1") {
         //取出数据
         const { province, city, weather, temperature } = data.lives[0];
         resolve({ province, city, weather, temperature });
@@ -47,4 +45,3 @@ export const reqWeather = (city) => {
     });
   });
 };
-// reqWeather(430481);
