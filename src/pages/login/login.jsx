@@ -7,15 +7,45 @@ import logo from "../../assets/imgs/logo.png"; //注意jsx中引入图片的方�
 import { reqLogin } from "../../api";
 import memoryUtils from "../../utils/memoryUtils";
 import storageUtils from "../../utils/storageUtils";
-const { Item } = Form; //解构赋值
+const { Item } = Form; //解构赋值，不能写在import语句之前
 
 export default class Login extends Component {
+  handleSubmit = async (values) => {
+    // console.log("Received values of form: ", values);
+    const { username, password } = values;
+    //发送给服务器
+    /* reqLogin(username, password)
+      .then((response) => {
+        console.log("成功", response.data);
+      })
+      .catch((error) => {
+        console.log("失败了", error);
+      }); 
+      */
+    //用async和await简化promise的使用
+    /* 在ajax.js文件中统一处理请求异常,try catch语句不再需要 */
+    // try {
+    const response = await reqLogin(username, password);
+    // console.log("请求成功", response.data);
+    const result = response.data;
+    if (result.status === 0) {
+      message.success("登录成功");
+      /* 保存user数据 */
+      const user = result.data;
+      memoryUtils.user = user; //保存到内存
+      storageUtils.saveUser(user); //保存到浏览器本地存储
+      /* 编程式路由.跳转到管理界面，不需要回退所以用replace */
+      this.props.history.replace("/admin");
+    }
+  };
+
   render() {
     //实现自动登录：若用户已登录(浏览器localStorage中存有值),则自动跳转到登录页面
     const user = memoryUtils.user;
     if (user && user._id) {
       return <Redirect to="/admin" />;
     }
+
     return (
       <div className="login">
         <header>
@@ -33,39 +63,7 @@ export default class Login extends Component {
               password: "admin",
             }}
             //统一验证
-            onFinish={async (values) => {
-              // console.log("Received values of form: ", values);
-              const { username, password } = values;
-              //发送给服务器
-              /* reqLogin(username, password)
-                .then((response) => {
-                  console.log("成功", response.data);
-                })
-                .catch((error) => {
-                  console.log("失败了", error);
-                }); 
-                */
-              //用async和await简化promise的使用
-              /* 在ajax.js文件中统一处理请求异常,try catch语句不再需要 */
-              // try {
-              const response = await reqLogin(username, password);
-              // console.log("请求成功", response.data);
-              const result = response.data;
-              if (result.status === 0) {
-                message.success("登录成功");
-                /* 保存user */
-                const user = result.data;
-                memoryUtils.user = user; //保存到内存
-                storageUtils.saveUser(user); //保存到local
-                /* 编程式路由.跳转到管理界面，不需要回退用replace */
-                this.props.history.replace("/admin");
-              } else {
-                message.error(result.msg);
-              }
-              // } catch (error) {
-              //   alert("请求失败了", error.message);
-              // }
-            }}
+            onFinish={this.handleSubmit}
             onFinishFailed={(errorFields) => {
               console.log("error: ", errorFields);
             }}

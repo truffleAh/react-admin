@@ -17,7 +17,7 @@ export const reqIP = () => {
   return new Promise((resolve, reject) => {
     const url = `https://restapi.amap.com/v3/ip?output=json&key=4739c89722d5f12caf2ce96d8d022978`;
     jsonp(url, {}, (err, data) => {
-      console.log("IP jsonp():", err, data);
+      // console.log("IP jsonp():", err, data);测试用代码
       if (!err && data.status === "1") {
         const { adcode } = data;
         resolve({ adcode });
@@ -34,7 +34,7 @@ export const reqWeather = (city) => {
     const url = `https://restapi.amap.com/v3/weather/weatherInfo?key=4739c89722d5f12caf2ce96d8d022978&output=json&city=${city}&extentions=base`;
     //发送jsonp请求
     jsonp(url, {}, (err, data) => {
-      console.log("Weather jsonp():", err, data);
+      // console.log("Weather jsonp():", err, data);测试用代码
       if (!err && data.status === "1") {
         //取出数据
         const { province, city, weather, temperature } = data.lives[0];
