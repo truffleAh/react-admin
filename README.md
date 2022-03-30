@@ -69,3 +69,5 @@ export const reqWeather = (city) => {
   });
 };
 ```
+
+## 10.
