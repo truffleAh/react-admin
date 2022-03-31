@@ -4,6 +4,7 @@
 import { message } from "antd";
 import axios from "axios";
 
+//type形参默认值为"GET"
 export default function ajax(url, data = {}, type = "GET") {
   /* 优化：统一处理请求异常(在外层包一个Promise对象,请求出错时不reject而是显示错误提示) */
   return new Promise((resolve, reject) => {

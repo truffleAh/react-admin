@@ -45,3 +45,13 @@ export const reqWeather = (city) => {
     });
   });
 };
+
+//获取category组件的分类列表
+export const reqCategorys = (parentId) =>
+  ajax("/base/manage/category/list", { parentId });
+//添加分类
+export const reqAddCategory = ({ categoryName, parentId }) =>
+  ajax("/base/manage/category/add", { categoryName, parentId }, "POST");
+//更新分类名称
+export const reqUpdateCategory = ({ categoryId, categoryName }) =>
+  ajax("/base/manage/category/update", { categoryId, categoryName }, "POST");
