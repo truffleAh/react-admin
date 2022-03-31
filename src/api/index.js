@@ -47,7 +47,7 @@ export const reqWeather = (city) => {
 };
 
 //获取category组件的分类列表
-export const reqCategorys = (parentId) =>
+export const reqCategories = (parentId) =>
   ajax("/base/manage/category/list", { parentId });
 //添加分类
 export const reqAddCategory = ({ categoryName, parentId }) =>

@@ -81,3 +81,26 @@ export const reqWeather = (city) => {
 }
 
 ```
+
+### 11.实现 category 组件异步显示一级分类目录的过程中,接口拿不到数据,获取分类列表失败：通过加入 console.log()打印数据的方式定位到了问题,数据在 result.data.data 里,而不是 result.data 里,后者导致 undefined.此外 result.status 的验证方式是 result.status===200,而不是视频课中的 result.status===0.
+
+```js
+getCategories = async () => {
+  //发请求前,显示loading转圈效果
+  this.setState({ loading: true });
+
+  //发异步ajax请求获取数据,由于返回promise对象,用async+await阻塞获取
+  const result = await reqCategories("0");
+  /* 下行是测试代码 */
+  // console.log(result, result.data.status);
+  //请求完成后,去掉loading转圈效果
+  this.setState({ loading: false });
+
+  if (result.status === 200) {
+    const categories = result.data.data; //数据在result.data.data中
+    this.setState({ categories });
+  } else {
+    message.error("获取分类列表失败");
+  }
+};
+```
