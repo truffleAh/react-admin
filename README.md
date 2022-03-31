@@ -70,4 +70,14 @@ export const reqWeather = (city) => {
 };
 ```
 
-## 10.
+## 10.在 category 组件中,引入 antd 的 Table 组件,修改鼠标移入移出表格行背景色的默认变化的方法：修改样式,【找到样式名】的方法见博客(https://blog.csdn.net/ling_kedu/article/details/108485015?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_aa&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1.pc_relevant_aa&utm_relevant_index=2)
+
+```js
+以下代码位于category的同级目录下 ./index.less
+
+.ant-table-tbody > tr.ant-table-row:hover > td,
+.ant-table-tbody > tr > td.ant-table-cell-row-hover {
+  background: #d4f0e7;
+}
+
+```
