@@ -104,3 +104,15 @@ getCategories = async () => {
   }
 };
 ```
+
+### 12.实现第 11 条中的功能后,第 10 条中的问题又出现了,自定义样式被默认样式覆盖：在自定义样式后加上!important 强制应用
+
+```js
+以下代码位于category的同级目录下 ./index.less
+
+.ant-table-tbody > tr.ant-table-row:hover > td,
+.ant-table-tbody > tr > td.ant-table-cell-row-hover {
+  background: #d4f0e7 !important;
+}
+
+```
