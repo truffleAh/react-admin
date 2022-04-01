@@ -1,4 +1,4 @@
-## 项目踩坑经验
+## 项目经验总结
 
 课程地址：https://www.bilibili.com/video/BV1i4411N7Qc
 
@@ -120,3 +120,15 @@ getCategories = async () => {
 ### 13.取不到二级分类列表的数据：经过分析定位,借助 Navicat 图形化操作给数据库 category 集合每个商品对象添加一个 id 键值对
 
 ### 14.category 组件添加和更新表单用到 antd v4 版本的 Form 组件,使用方法与视频课有出入,参照 login 组件中 Form 的用法,都需要实现默认值初始化与表单输入检查认证的功能
+
+### 15.vscode 进行 git push 提交代码时,被 reject,报错如下：远程分支上存在本地分支中不存在的提交，往往是多人协作开发过程中遇到的问题，可以先 fetch 再 merge，也就是 pull，把远程分支上的提交合并到本地分支之后再 push。如果你确定远程分支上那些提交都不需要了，那么直接 git push origin master -f，强行让本地分支覆盖远程分支。
+
+```shell
+! [rejected] master -> master (fetch first)
+error: failed to push some refs to 'git@github.com:qzmly100/repository-.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+```

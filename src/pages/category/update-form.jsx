@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Form, Select, Input } from "antd";
+import { Form, Input } from "antd";
 const { Item } = Form;
 
 export default class UpdateForm extends Component {
