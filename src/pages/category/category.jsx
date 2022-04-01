@@ -1,9 +1,11 @@
-import { Button, Card, Table, Space, message } from "antd";
+import { Button, Card, Table, Space, message, Modal } from "antd";
 import React, { Component } from "react";
 import { PlusOutlined, RightSquareOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton/index";
 import "./index.less";
 import { reqCategories } from "../../api/index";
+import AddForm from "./add-form";
+import UpdateForm from "./update-form";
 
 export default class Category extends Component {
   state = {
@@ -12,6 +14,7 @@ export default class Category extends Component {
     subCategories: [], //二级子分类列表
     parentId: "0", //当前分类列表的父类Id
     parentName: "", //当前子分类列表的父类名称
+    visibleStatus: 0, //对话框是否显示,设0表示都不显示,1表示显示添加,2显示更新对话框
   };
 
   /* 初始化Table所有列 */
@@ -29,7 +32,7 @@ export default class Category extends Component {
         //每行都是一个category对象,将对象传到showSubCategories函数里
         render: (category) => (
           <Space size="middle">
-            <LinkButton>修改分类</LinkButton>
+            <LinkButton onClick={this.showUpdate}>修改分类</LinkButton>
             {/*用箭头函数的形式定义异步事件回调函数,
             注意不要写成onClick={this.showSubCategories(categories)},
             因为它在初次渲染就会自动调用 */}
@@ -81,6 +84,26 @@ export default class Category extends Component {
     //重置状态,返回一级分类列表
     this.setState({ parentId: "0", parentName: "", subCategories: [] });
   };
+  /* 显示添加分类的对话框 */
+  showAdd = () => {
+    this.setState({ visibleStatus: 1 });
+  };
+  /* 显示更新分类的对话框 */
+  showUpdate = () => {
+    this.setState({ visibleStatus: 2 });
+  };
+  /* 响应对话框点击取消 */
+  handleCancel = () => {
+    this.setState({ visibleStatus: 0 });
+  };
+  /* 列表添加分类 */
+  addCategory = () => {
+    console.log("addCategory");
+  };
+  /* 更新分类 */
+  updateCategory = () => {
+    console.log("updateCategory");
+  };
   // 为第一次render准备数据
   constructor(props) {
     super(props);
@@ -116,7 +139,7 @@ export default class Category extends Component {
         </span>
       );
     const extra = (
-      <Button type="primary">
+      <Button type="primary" onClick={this.showAdd}>
         <PlusOutlined />
         添加
       </Button>
@@ -132,6 +155,25 @@ export default class Category extends Component {
           pagination={{ defaultPageSize: 5 }}
           loading={loading}
         />
+
+        <Modal
+          title="添加分类"
+          visible={this.state.visibleStatus === 1}
+          onOk={this.addCategory}
+          onCancel={this.handleCancel}
+          destroyOnClose //关闭对话框时重置
+        >
+          <AddForm />
+        </Modal>
+
+        <Modal
+          title="更新分类"
+          visible={this.state.visibleStatus === 2}
+          onOk={this.updateCategory}
+          onCancel={this.handleCancel}
+        >
+          <UpdateForm />
+        </Modal>
       </Card>
     );
   }
