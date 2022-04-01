@@ -1,6 +1,6 @@
 import { Button, Card, Table, Space, message } from "antd";
 import React, { Component } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined, RightSquareOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton/index";
 import "./index.less";
 import { reqCategories } from "../../api/index";
@@ -9,6 +9,9 @@ export default class Category extends Component {
   state = {
     loading: false,
     categories: [],
+    subCategories: [], //二级子分类列表
+    parentId: "0", //当前分类列表的父类Id
+    parentName: "", //当前子分类列表的父类名称
   };
 
   /* 初始化Table所有列 */
@@ -23,22 +26,31 @@ export default class Category extends Component {
       {
         title: "操作",
         width: 300,
-        render: () => (
+        //每行都是一个category对象,将对象传到showSubCategories函数里
+        render: (category) => (
           <Space size="middle">
             <LinkButton>修改分类</LinkButton>
-            <LinkButton>查看子分类</LinkButton>
+            {/*用箭头函数的形式定义异步事件回调函数,
+            注意不要写成onClick={this.showSubCategories(categories)},
+            因为它在初次渲染就会自动调用 */}
+            {this.state.parentId === "0" ? (
+              <LinkButton onClick={() => this.showSubCategories(category)}>
+                查看子分类
+              </LinkButton>
+            ) : null}
           </Space>
         ),
       },
     ];
   };
-  /* 异步获取一级分类列表显示 */
+
+  /* 异步获取一级或二级分类列表显示 */
   getCategories = async () => {
     //发请求前,显示loading转圈效果
     this.setState({ loading: true });
-
+    const { parentId } = this.state;
     //发异步ajax请求获取数据,由于返回promise对象,用async+await阻塞获取
-    const result = await reqCategories("0");
+    const result = await reqCategories(parentId);
     // console.log(result, result.data.status);测试代码
 
     //请求完成后,去掉loading转圈效果
@@ -46,10 +58,28 @@ export default class Category extends Component {
 
     if (result.status === 200) {
       const categories = result.data.data;
-      this.setState({ categories });
+      if (parentId === "0") {
+        this.setState({ categories });
+      } else {
+        this.setState({ subCategories: categories });
+      }
     } else {
       message.error("获取分类列表失败");
     }
+  };
+
+  /* 显示一级分类对象的二级子列表 */
+  showSubCategories = (category) => {
+    //this.setState是异步执行状态更新的,应在其回调函数中拿到更新后的状态进行操作
+    this.setState({ parentId: category.id, parentName: category.name }, () => {
+      // console.log(this.state.parentName, this.state.parentId);
+      this.getCategories();
+    });
+  };
+  /* 从二级分类子列表返回一级分类列表的回调函数 */
+  showParentCategory = () => {
+    //重置状态,返回一级分类列表
+    this.setState({ parentId: "0", parentName: "", subCategories: [] });
   };
   // 为第一次render准备数据
   constructor(props) {
@@ -64,9 +94,27 @@ export default class Category extends Component {
   }
 
   render() {
-    const { categories, loading } = this.state;
+    const { parentId, loading, parentName, categories, subCategories } =
+      this.state;
 
-    const title = "一级分类列表";
+    const title =
+      parentId === "0" ? (
+        "一级分类列表"
+      ) : (
+        <span>
+          <LinkButton
+            onClick={() => {
+              this.showParentCategory();
+            }}
+          >
+            一级分类列表
+          </LinkButton>
+          &nbsp;
+          <RightSquareOutlined />
+          &nbsp;&nbsp;
+          <span>{parentName}</span>
+        </span>
+      );
     const extra = (
       <Button type="primary">
         <PlusOutlined />
@@ -77,7 +125,7 @@ export default class Category extends Component {
     return (
       <Card title={title} extra={extra}>
         <Table
-          dataSource={categories}
+          dataSource={parentId === "0" ? categories : subCategories}
           columns={this.columns}
           bordered
           rowKey="id"

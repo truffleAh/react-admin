@@ -116,3 +116,5 @@ getCategories = async () => {
 }
 
 ```
+
+### 13.取不到二级分类列表的数据：经过分析定位,借助 Navicat 图形化操作给数据库 category 集合每个商品对象添加一个 id 键值对
