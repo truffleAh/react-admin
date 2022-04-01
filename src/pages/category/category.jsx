@@ -40,6 +40,7 @@ export default class Category extends Component {
     //发异步ajax请求获取数据,由于返回promise对象,用async+await阻塞获取
     const result = await reqCategories("0");
     // console.log(result, result.data.status);测试代码
+
     //请求完成后,去掉loading转圈效果
     this.setState({ loading: false });
 
