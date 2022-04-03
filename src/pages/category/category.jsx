@@ -32,7 +32,9 @@ export default class Category extends Component {
         //每行都是一个category对象,将对象传到showSubCategories函数里
         render: (category) => (
           <Space size="middle">
-            <LinkButton onClick={this.showUpdate}>修改分类</LinkButton>
+            <LinkButton onClick={() => this.showUpdate(category)}>
+              修改分类
+            </LinkButton>
             {/*用箭头函数的形式定义异步事件回调函数,
             注意不要写成onClick={this.showSubCategories(categories)},
             因为它在初次渲染就会自动调用 */}
@@ -89,7 +91,10 @@ export default class Category extends Component {
     this.setState({ visibleStatus: 1 });
   };
   /* 显示更新分类的对话框 */
-  showUpdate = () => {
+  showUpdate = (category) => {
+    //保存分类对象
+    this.category = category;
+    //更新状态
     this.setState({ visibleStatus: 2 });
   };
   /* 响应对话框点击取消 */
@@ -119,6 +124,8 @@ export default class Category extends Component {
   render() {
     const { parentId, loading, parentName, categories, subCategories } =
       this.state;
+    //读取指定分类
+    const category = this.category;
 
     const title =
       parentId === "0" ? (
@@ -172,7 +179,7 @@ export default class Category extends Component {
           onOk={this.updateCategory}
           onCancel={this.handleCancel}
         >
-          <UpdateForm />
+          <UpdateForm categoryName={category ? category.name : ""} />
         </Modal>
       </Card>
     );
