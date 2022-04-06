@@ -3,7 +3,11 @@ import React, { Component } from "react";
 import { PlusOutlined, RightSquareOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton/index";
 import "./index.less";
-import { reqCategories, reqUpdateCategory } from "../../api/index";
+import {
+  reqCategories,
+  reqUpdateCategory,
+  reqAddCategory,
+} from "../../api/index";
 import AddForm from "./add-form";
 import UpdateForm from "./update-form";
 
@@ -76,7 +80,7 @@ export default class Category extends Component {
   /* 显示一级分类对象的二级子列表 */
   showSubCategories = (category) => {
     //this.setState是异步执行状态更新的,应在其回调函数中拿到更新后的状态进行操作
-    this.setState({ parentId: category.id, parentName: category.name }, () => {
+    this.setState({ parentId: category._id, parentName: category.name }, () => {
       // console.log(this.state.parentName, this.state.parentId);
       this.getCategories();
     });
@@ -102,9 +106,36 @@ export default class Category extends Component {
     this.setState({ visibleStatus: 0 });
   };
   /* 列表添加分类 */
-  addCategory = () => {
-    console.log("addCategory");
+  addCategory = async () => {
+    this.form
+      .validateFields()
+      .then(async (values) => {
+        // 1.隐藏弹框
+        this.setState({
+          visibleStatus: 0,
+        });
+        // 2.收集数据，发送请求
+        const { parentId, categoryName } = values;
+        // console.log(parentId);
+        // console.log(categoryName);
+        const result = await reqAddCategory(categoryName, parentId);
+        if (result.status === 200) {
+          // 3.重新显示列表
+          if (parentId === this.state.parentId) {
+            // 如果添加的是当前分类下的列表，则刷新，其他分类的不刷新
+            this.getCategories();
+          } else if (parentId === "0") {
+            // 在二级分类列表下添加一级分类，重新获取一级分类列表，但不需要显示
+            this.getCategories("0");
+          }
+        }
+      })
+      .catch((err) => {
+        //console.log(err);
+        message.err("请输入分类名称");
+      });
   };
+
   /* 更新分类 */
   updateCategory = () => {
     // console.log('update',this.form);
@@ -118,7 +149,7 @@ export default class Category extends Component {
         });
 
         // 准备数据
-        const categoryId = this.category.id;
+        const categoryId = this.category._id;
         const { categoryName } = values;
         // console.log(categoryId, categoryName);
         // 清除输入文本框数据
@@ -185,7 +216,7 @@ export default class Category extends Component {
           dataSource={parentId === "0" ? categories : subCategories}
           columns={this.columns}
           bordered
-          rowKey="id"
+          rowKey="_id"
           pagination={{ defaultPageSize: 5 }}
           loading={loading}
         />
@@ -197,7 +228,11 @@ export default class Category extends Component {
           onCancel={this.handleCancel}
           destroyOnClose //关闭对话框时重置
         >
-          <AddForm />
+          <AddForm
+            categories={categories}
+            parentId={parentId}
+            setForm={(form) => (this.form = form)}
+          />
         </Modal>
 
         <Modal

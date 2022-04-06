@@ -117,7 +117,7 @@ getCategories = async () => {
 
 ```
 
-### 13.取不到二级分类列表的数据：经过分析定位,借助 Navicat 图形化操作给数据库 category 集合每个商品对象添加一个 id 键值对
+### 13.【见第 19 条】取不到二级分类列表的数据：经过分析定位,借助 Navicat 图形化操作给数据库 category 集合每个商品对象添加一个 id 键值对
 
 ### 14.category 组件添加和更新表单用到 antd v4 版本的 Form 组件,使用方法与视频课有出入,参照 login 组件中 Form 的用法,都需要实现默认值初始化与表单输入检查认证的功能
 
@@ -141,4 +141,8 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 
 ```
 
-### 18.数据库更新操作失败,不管有没有输入内容,点击 ok 后原 categoryName 变为 null,经 console.log 打印检验,input 框输入的也没拿到,显示为 undefined,而 API 经过 postman 测试也并未出问题：？
+### 18.数据库更新操作失败,input 框的输入没拿到,显示为 undefined,而 API 经过 postman 测试也并未出问题：？
+
+### 19.对于上述第 13 条，其实每个文档都有\_id 属性，无需另外自行创建 id 键值对。问题出在数据库的导入操作，\_id 字段在 Navicat 自动导入 collection 的时候没有去手动选择 ObjectId 类型，默认选贼 String 类型
+
+### 20.category 组件中添加失败,后台显示缺少必要的 path:'name'。排查中发现定义 ajax API 接口有失误，去掉参数列表外的{}，问题得到解决。但第 18 条更新列表名称功能仍未实现。
