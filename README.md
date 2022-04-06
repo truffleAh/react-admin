@@ -138,7 +138,17 @@ hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ### 17.category 组件更新修改分类的回调函数父子组件通信问题(antd 4 + Modal 中表单 Form 提交验证的解决方案) ：antd4.x 通过 ref 绑定获取 form 实例传过去.
 
 ```js
-
+category.jsx中添加setForm如下
+<UpdateForm categoryName={category ? category.name : ""}
+setForm={(form) => (this.form = form)}/>
+再在update-form中：
+创建ref，formRef = React.createRef();
+在钩子函数中初始化
+componentDidMount() {
+    // console.log(this.formRef, this.props);
+    this.props.setForm(this.formRef.current);
+  }
+然后再传到render函数中的表单<Form ref={this.formRef}>
 ```
 
 ### 18.数据库更新操作失败,input 框的输入没拿到,显示为 undefined,而 API 经过 postman 测试也并未出问题：？

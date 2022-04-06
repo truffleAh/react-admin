@@ -106,7 +106,7 @@ export default class Category extends Component {
     this.setState({ visibleStatus: 0 });
   };
   /* 列表添加分类 */
-  addCategory = async () => {
+  addCategory = () => {
     this.form
       .validateFields()
       .then(async (values) => {
