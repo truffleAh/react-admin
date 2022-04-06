@@ -133,4 +133,12 @@ hint: (e.g., 'git pull ...') before pushing again.
 hint: See the 'Note about fast-forwards' in 'git push --help' for details.
 ```
 
-### 16.category 组件更新分类功能中当前行修改分类操作 input 框默认输入未能实现动态显示：【待解决】 【弹幕--antd4.x 通过 ref 绑定获取 form 实例传过去.待检验】
+### 16.category 组件更新分类功能中当前行修改分类操作 form 表单中的 input 输入框无法更新 ：在对应的 Modal 组件标签中添加 destroyOnClose 属性 ，用于关闭时销毁重置数据
+
+### 17.category 组件更新修改分类的回调函数父子组件通信问题(antd 4 + Modal 中表单 Form 提交验证的解决方案) ：antd4.x 通过 ref 绑定获取 form 实例传过去.
+
+```js
+
+```
+
+### 18.数据库更新操作失败,不管有没有输入内容,点击 ok 后原 categoryName 变为 null,经 console.log 打印检验,input 框输入的也没拿到,显示为 undefined,而 API 经过 postman 测试也并未出问题：？

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { PlusOutlined, RightSquareOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton/index";
 import "./index.less";
-import { reqCategories } from "../../api/index";
+import { reqCategories, reqUpdateCategory } from "../../api/index";
 import AddForm from "./add-form";
 import UpdateForm from "./update-form";
 
@@ -107,8 +107,35 @@ export default class Category extends Component {
   };
   /* 更新分类 */
   updateCategory = () => {
-    console.log("updateCategory");
+    // console.log('update',this.form);
+    // 进行表单验证 只有通过才能验证
+    this.form
+      .validateFields()
+      .then(async (values) => {
+        // 1、隐藏显示框
+        this.setState({
+          visibleStatus: 0,
+        });
+
+        // 准备数据
+        const categoryId = this.category.id;
+        const { categoryName } = values;
+        // console.log(categoryId, categoryName);
+        // 清除输入文本框数据
+        // this.form.resetFields();
+
+        // 2、发请求更新分类
+        const result = await reqUpdateCategory({ categoryId, categoryName });
+        // 3、重新显示列表
+        if (result.status === 200) {
+          this.getCategories();
+        }
+      })
+      .catch((err) => {
+        message.info("请输入分类名称");
+      });
   };
+
   // 为第一次render准备数据
   constructor(props) {
     super(props);
@@ -178,8 +205,12 @@ export default class Category extends Component {
           visible={this.state.visibleStatus === 2}
           onOk={this.updateCategory}
           onCancel={this.handleCancel}
+          destroyOnClose //关闭对话框时重置
         >
-          <UpdateForm categoryName={category ? category.name : ""} />
+          <UpdateForm
+            categoryName={category ? category.name : ""}
+            setForm={(form) => (this.form = form)}
+          />
         </Modal>
       </Card>
     );

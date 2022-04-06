@@ -9,11 +9,18 @@ export default class UpdateForm extends Component {
     categoryName: propTypes.string.isRequired,
   };
 
+  formRef = React.createRef();
+
+  componentDidMount() {
+    // console.log(this.formRef, this.props);
+    this.props.setForm(this.formRef.current);
+  }
+
   render() {
     const { categoryName } = this.props;
 
     return (
-      <Form>
+      <Form ref={this.formRef}>
         <Item>
           <Input placeholder="请输入分类名称" defaultValue={categoryName} />
         </Item>
