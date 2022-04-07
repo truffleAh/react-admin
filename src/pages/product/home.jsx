@@ -76,7 +76,7 @@ export default class ProductHome extends Component {
       result = await reqProducts(pageNum, PAGE_SIZE);
     }
     this.setState({ loading: false }); //隐藏loading
-    console.log(result);
+    // console.log(result);
     if (result.data.status === 0) {
       const { total, list } = result.data.data;
       this.setState({ total, products: list });
