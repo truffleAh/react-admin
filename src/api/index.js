@@ -55,4 +55,7 @@ export const reqAddCategory = (categoryName, parentId) =>
 //更新分类名称
 export const reqUpdateCategory = ({ categoryId, categoryName }) =>
   ajax("/base/manage/category/update", { categoryId, categoryName }, "POST");
- 
+
+//获取商品分页列表
+export const reqProducts = (pageNum, pageSize) =>
+  ajax("/base/manage/product/list", { pageNum, pageSize });
