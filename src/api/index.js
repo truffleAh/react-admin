@@ -59,3 +59,10 @@ export const reqUpdateCategory = ({ categoryId, categoryName }) =>
 //获取商品分页列表
 export const reqProducts = (pageNum, pageSize) =>
   ajax("/base/manage/product/list", { pageNum, pageSize });
+//搜索商品分页列表,searchType搜索的类型--productName/productDesc
+export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) =>
+  ajax("/base/manage/product/search", {
+    pageNum,
+    pageSize,
+    [searchType]: searchName, //参数名作为属性名加[]号
+  });

@@ -156,3 +156,18 @@ componentDidMount() {
 ### 19.对于上述第 13 条，其实每个文档都有\_id 属性，无需另外自行创建 id 键值对。问题出在数据库的导入操作，\_id 字段在 Navicat 自动导入 collection 的时候没有去手动选择 ObjectId 类型，默认选贼 String 类型
 
 ### 20.category 组件中添加失败,后台显示缺少必要的 path:'name'。排查中发现定义 ajax API 接口有失误，去掉参数列表外的{}，问题得到解决。但第 18 条更新列表名称功能仍未实现。
+
+### 21.productHome 组件搜索分页功能,点击搜索按钮无数据返回,product 数组为空：检查发现请求参数 pageSize 为 null,修改 ajax 请求接口参数数量为 4 个变量,而不是按照视频教学的传一个对象,这是因为参数使用了全局常量 PAGE_SIZE,使用对象传递取不到值.ProductHome 组件中使用该请求函数也做相应修改
+
+```js
+以下代码位于src / api / index.js;
+//搜索商品分页列表,searchType搜索的类型--productName/productDesc
+
+//传4个变量pageNum, pageSize, searchName, searchType，而不是一个对象{pageNum, pageSize, searchName, searchType}.
+export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) =>
+  ajax("/base/manage/product/search", {
+    pageNum,
+    pageSize,
+    [searchType]: searchName, //参数名作为属性名加[]号
+  });
+```
