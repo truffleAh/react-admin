@@ -8,8 +8,10 @@ const { TextArea } = Input;
 
 export default class ProductAddUpdate extends Component {
   state = { options: [] };
-
-  handleSubmit = () => {};
+  /* 对收集到的表单数据进行处理 */
+  handleSubmit = (values) => {
+    console.log(values);
+  };
   /* 自定义验证器中的验证价格函数 */
   validatePrice = async (rull, value, callback) => {
     if (value > 0) {
@@ -41,14 +43,34 @@ export default class ProductAddUpdate extends Component {
     this.setState({ options: [...this.state.options] });
   };
   /* 根据categories数组生成options数组,并更新状态 */
-  initOptions = (categories) => {
+  initOptions = async (categories) => {
     const options = categories.map((item) => ({
       value: item._id,
       label: item.name,
       isLeaf: false,
     }));
+    //若是二级分类商品的更新
+    const { isUpdate, product } = this;
+    const { pCategoryId, categoryId } = product;
+    if (isUpdate && pCategoryId !== "0") {
+      //获取对应的二级分类列表
+      const subCategories = await this.getCategories(pCategoryId);
+      //生成二级下拉列表
+      const subOptions = subCategories.map((item) => ({
+        value: item._id,
+        label: item.name,
+        isLeaf: true,
+      }));
+      //找到当前商品对应的一级分类对象
+      const targetOption = options.find(
+        (option) => option.value === pCategoryId
+      );
+      //关联到对应的一级分类对象
+      targetOption.children = subOptions;
+    }
     this.setState({ options });
   };
+
   /* 异步获取一级/二级分类列表 */
   getCategories = async (parentId) => {
     const result = await reqCategories(parentId);
@@ -64,12 +86,36 @@ export default class ProductAddUpdate extends Component {
       }
     }
   };
+
+  constructor(props) {
+    super(props);
+    //如果是添加商品则没值,修改商品则有值
+    const product = this.props.location.state;
+    this.isUpdate = !!product; //2个!强制转布尔类型值
+    this.product = product || {};
+  }
+
   /* 注意不要缺少这步 */
   componentDidMount() {
     this.getCategories("0");
   }
 
   render() {
+    const { isUpdate, product } = this;
+    /* 实现修改商品页面默认分类的选中效果 */
+    const { categoryId, pCategoryId } = product;
+    const categoryIds = [];
+    if (isUpdate) {
+      //商品是一级分类商品
+      if (pCategoryId === "0") {
+        categoryIds.push(categoryId);
+      } else {
+        //商品是二级分类商品
+        categoryIds.push(pCategoryId);
+        categoryIds.push(categoryId);
+      }
+    }
+
     const title = (
       <span>
         <LinkButton>
@@ -80,7 +126,7 @@ export default class ProductAddUpdate extends Component {
             }}
           />
         </LinkButton>
-        &nbsp; 添加商品
+        &nbsp; {isUpdate ? "修改商品" : "添加商品"}
       </span>
     );
 
@@ -100,9 +146,10 @@ export default class ProductAddUpdate extends Component {
           {...layout}
           initialValues={{
             remember: true,
-            name: "",
-            desc: "",
-            price: "",
+            name: product.name,
+            desc: product.desc,
+            price: product.price,
+            categoryIds: categoryIds,
           }}
           onFinish={this.handleSubmit}
         >
@@ -130,7 +177,11 @@ export default class ProductAddUpdate extends Component {
           >
             <Input prefix="￥" suffix="RMB" />
           </Item>
-          <Item label="商品分类">
+          <Item
+            label="商品分类"
+            name="categoryIds"
+            rules={[{ required: true, message: "必须指定商品分类" }]}
+          >
             <Cascader
               options={this.state.options} //需要显示的列表数据
               loadData={this.loadData} //当选择某个列表项时,加载下一级列表的监听回调
