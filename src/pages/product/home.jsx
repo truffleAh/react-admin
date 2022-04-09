@@ -35,8 +35,8 @@ export default class ProductHome extends Component {
         title: "状态",
         // dataIndex: "status",
         width: 100,
-        render: ( product) => {
-          const { status,_id } = product;
+        render: (product) => {
+          const { status, _id } = product;
           return (
             <span>
               <Button
@@ -148,7 +148,12 @@ export default class ProductHome extends Component {
       </span>
     );
     const extra = (
-      <Button type="primary">
+      <Button
+        type="primary"
+        onClick={() => {
+          this.props.history.push("/products/product/addUpdate");
+        }}
+      >
         <PlusOutlined />
         添加商品
       </Button>

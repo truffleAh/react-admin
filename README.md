@@ -1,6 +1,10 @@
 ## 项目经验总结
 
-课程地址：https://www.bilibili.com/video/BV1i4411N7Qc
+项目说明：
+(1).课程地址：https://www.bilibili.com/video/BV1i4411N7Qc,
+b 站课程不完整,可去尚硅谷公众号获取网盘完整课程.
+(2).antd 用的最新版 4.0 系列,而非视频课中的 3 版本,用法有出入,仔细查阅文档
+(3).项目用 yarn 作为包管理工具,启动命令 yarn start.下载本项目时初始化依赖 生成 node_modules 直接用命令 yarn
 
 ### 1.引入 antd 组件 Form 无样式：忘记在入口文件 index.js 中导入 antd 的样式
 
@@ -173,3 +177,18 @@ export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) =>
 ```
 
 ### 22.productHone 组件商品上架下架功能失败,api 经 postman 测试无问题,但是点击 Button 按钮却无反应,数据库也未得到修改：经弹幕提示,初始化对应的表格时将 dataIndex:"status"注销,render(product)传入 products 问题得到解决,或如 render(status,product)传入 2 个参数,不注销 dataIndex:"status"也可解决问题,关键是 antd 文档 相关 API 不够熟悉
+
+### 23.ProductAddUpdate 表单验证参照 Loin.jsx,用的是 antd v4 的 API 实现
+
+```js
+以下代码位于pages/product/addUpdate.jsx
+注意最新(antd v4)自定义表单验证器的写法, 返回的是一个Promise对象;
+/* 自定义验证器中的验证价格函数 */
+validatePrice = async (rull, value, callback) => {
+  if (value > 0) {
+    return Promise.resolve();
+  } else {
+    return Promise.reject("请输入正确的价格！");
+  }
+};
+```
