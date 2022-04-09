@@ -24,7 +24,9 @@ class LeftNav extends Component {
         );
       } else {
         //查找一个与当前请求路径匹配的子路径
-        const cItem = item.children.find((cItem) => cItem.key === path);
+        const cItem = item.children.find(
+          (cItem) => path.indexOf(cItem.key) === 0
+        );
         if (cItem) {
           this.openKey = item.key;
         }
@@ -48,7 +50,12 @@ class LeftNav extends Component {
   render() {
     // debugger
     //得到当前请求的路由路径,实现刷新时依然自动选中当前菜单项
-    const path = this.props.location.pathname;
+    let path = this.props.location.pathname;
+    /* 当前请求的是商品或其子路由界面(详情/修改),保证左导航栏商品管理的选中 */
+    if (path.indexOf("/products/product") === 0) {
+      path = "/products/product";
+    }
+
     const openKey = this.openKey;
 
     return (
