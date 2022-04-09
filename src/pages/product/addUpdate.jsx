@@ -4,8 +4,22 @@ import { LeftCircleOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton";
 const { Item } = Form;
 const { TextArea } = Input;
+const optionLists = [
+  {
+    value: "zhejiang",
+    label: "Zhejiang",
+    isLeaf: false,
+  },
+  {
+    value: "jiangsu",
+    label: "Jiangsu",
+    isLeaf: false,
+  },
+];
 
 export default class ProductAddUpdate extends Component {
+  state = { optionLists };
+
   handleSubmit = () => {};
   /* 自定义验证器中的验证价格函数 */
   validatePrice = async (rull, value, callback) => {
@@ -14,6 +28,25 @@ export default class ProductAddUpdate extends Component {
     } else {
       return Promise.reject("请输入正确的价格！");
     }
+  };
+  /* 用于加载下一级列表的回调函数 */
+  loadData = (selectedOptions) => {
+    const targetOption = selectedOptions[0];
+    targetOption.loading = true;
+    setTimeout(() => {
+      targetOption.loading = false;
+      targetOption.children = [
+        {
+          label: `${targetOption.label} Dynamic 1`,
+          value: "dynamic1",
+        },
+        {
+          label: `${targetOption.label} Dynamic 2`,
+          value: "dynamic2",
+        },
+      ];
+      this.setState({optionLists:[...this.state.optionLists]});
+    }, 1000);
   };
 
   render() {
@@ -30,6 +63,7 @@ export default class ProductAddUpdate extends Component {
         &nbsp; 添加商品
       </span>
     );
+
     /* 指定Form.Item布局的配置对象 */
     const layout = {
       labelCol: {
@@ -77,7 +111,10 @@ export default class ProductAddUpdate extends Component {
             <Input prefix="￥" suffix="RMB" />
           </Item>
           <Item label="商品分类">
-            <div>商品分类</div>
+            <Cascader
+              options={this.state.optionLists} //需要显示的列表数据
+              loadData={this.loadData} //当选择某个列表项时,加载下一级列表的监听回调
+            />
           </Item>
           <Item label="商品图片">
             <div>商品图片</div>
