@@ -19,23 +19,26 @@ export default class ProductAddUpdate extends Component {
     }
   };
   /* 用于加载下一级列表的回调函数 */
-  loadData = (selectedOptions) => {
+  loadData = async (selectedOptions) => {
     const targetOption = selectedOptions[0];
     targetOption.loading = true;
-    setTimeout(() => {
-      targetOption.loading = false;
-      targetOption.children = [
-        {
-          label: `${targetOption.label} Dynamic 1`,
-          value: "dynamic1",
-        },
-        {
-          label: `${targetOption.label} Dynamic 2`,
-          value: "dynamic2",
-        },
-      ];
-      this.setState({ options: [...this.state.options] });
-    }, 1000);
+    //根据选中的分类,请求获取二级分类列表
+    const subCategories = await this.getCategories(targetOption.value);
+    targetOption.loading = false;
+
+    if (subCategories && subCategories.length > 0) {
+      //生成一个二级列表的options
+      const subOptions = subCategories.map((item) => ({
+        value: item._id,
+        label: item.name,
+        isLeaf: true,
+      }));
+      targetOption.children = subOptions;
+    } else {
+      //当前选中的分类没有二级子分类
+      targetOption.isLeaf = true;
+    }
+    this.setState({ options: [...this.state.options] });
   };
   /* 根据categories数组生成options数组,并更新状态 */
   initOptions = (categories) => {
@@ -46,13 +49,19 @@ export default class ProductAddUpdate extends Component {
     }));
     this.setState({ options });
   };
-
+  /* 异步获取一级/二级分类列表 */
   getCategories = async (parentId) => {
     const result = await reqCategories(parentId);
     // console.log(result);
     if (result.data.status === 0) {
       const categories = result.data.data;
-      this.initOptions(categories);
+      //若是一级分类列表
+      if (parentId === "0") {
+        this.initOptions(categories);
+      } else {
+        //二级分类列表
+        return categories;
+      }
     }
   };
   /* 注意不要缺少这步 */
@@ -125,6 +134,7 @@ export default class ProductAddUpdate extends Component {
             <Cascader
               options={this.state.options} //需要显示的列表数据
               loadData={this.loadData} //当选择某个列表项时,加载下一级列表的监听回调
+              placeholder="请选择"
             />
           </Item>
           <Item label="商品图片">
