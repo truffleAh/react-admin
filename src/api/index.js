@@ -69,3 +69,6 @@ export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) =>
     pageSize,
     [searchType]: searchName, //参数名作为属性名加[]号
   });
+//更新商品状态(对商品做上架/下架处理)
+export const reqUpdateStatus = (productId, status) =>
+  ajax("/base/manage/product/updateStatus", { productId, status }, "POST");

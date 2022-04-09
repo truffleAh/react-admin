@@ -171,3 +171,5 @@ export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) =>
     [searchType]: searchName, //参数名作为属性名加[]号
   });
 ```
+
+### 22.productHone 组件商品上架下架功能失败,api 经 postman 测试无问题,但是点击 Button 按钮却无反应,数据库也未得到修改：经弹幕提示,初始化对应的表格时将 dataIndex:"status"注销,render(product)传入 products 问题得到解决,或如 render(status,product)传入 2 个参数,不注销 dataIndex:"status"也可解决问题,关键是 antd 文档 相关 API 不够熟悉

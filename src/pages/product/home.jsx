@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Card, Select, Input, Button, Table } from "antd";
+import { Card, Select, Input, Button, Table, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton";
-import { reqProducts, reqSearchProducts } from "../../api";
+import { reqProducts, reqSearchProducts, reqUpdateStatus } from "../../api";
 import { PAGE_SIZE } from "../../utils/constants";
 const Option = Select.Option;
 /* Product的默认子路由组件 */
@@ -33,13 +33,21 @@ export default class ProductHome extends Component {
       },
       {
         title: "状态",
-        dataIndex: "status",
+        // dataIndex: "status",
         width: 100,
-        render: (status) => {
+        render: ( product) => {
+          const { status,_id } = product;
           return (
             <span>
-              <Button type="primary">下架</Button>
-              <span>在售</span>
+              <Button
+                type="primary"
+                onClick={() => {
+                  this.updateStatus(_id, status === 1 ? 2 : 1);
+                }}
+              >
+                {status === 1 ? "下架" : "上架"}
+              </Button>
+              <span>{status === 1 ? "在售" : "已下架"}</span>
             </span>
           );
         },
@@ -87,6 +95,16 @@ export default class ProductHome extends Component {
     if (result.data.status === 0) {
       const { total, list } = result.data.data;
       this.setState({ total, products: list });
+    }
+  };
+
+  /* 更新指定商品的状态 */
+  updateStatus = async (productId, status) => {
+    const result = await reqUpdateStatus(productId, status);
+    // console.log(result);
+    if (result.data.status === 0) {
+      message.success("更新商品成功");
+      this.getProducts(1);
     }
   };
 
