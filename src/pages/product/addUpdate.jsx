@@ -1,8 +1,9 @@
 import React, { Component } from "react";
-import { Card, Form, Input, Cascader, Upload, Button } from "antd";
+import { Card, Form, Input, Cascader, Button } from "antd";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton";
 import { reqCategories } from "../../api/index";
+import PicturesWall from "./pictures-wall";
 const { Item } = Form;
 const { TextArea } = Input;
 
@@ -189,7 +190,7 @@ export default class ProductAddUpdate extends Component {
             />
           </Item>
           <Item label="商品图片">
-            <div>商品图片</div>
+            <PicturesWall />
           </Item>
           <Item label="商品详情">
             <div>商品详情</div>
