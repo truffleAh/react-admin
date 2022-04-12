@@ -72,3 +72,10 @@ export const reqSearchProducts = (pageNum, pageSize, searchName, searchType) =>
 //更新商品状态(对商品做上架/下架处理)
 export const reqUpdateStatus = (productId, status) =>
   ajax("/base/manage/product/updateStatus", { productId, status }, "POST");
+//添加或修改商品
+export const reqAddOrUpdateProduct = (product) =>
+  ajax(
+    "/base/manage/product/" + (product._id ? "update" : "add"),
+    product,
+    "POST"
+  );

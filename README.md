@@ -192,3 +192,21 @@ validatePrice = async (rull, value, callback) => {
   }
 };
 ```
+
+### 24.PictruesWall 组件用 antd 的 Upload 组件实现图片上传功能,其中的 action 的值为 url 上传地址,记得在 url 路径前加上/base 来跨域【setupProxy.js 中配置代理】
+
+### 25.修改商品失败：读取 imgs 里图片路径搞错并且没有使用跨域
+
+```js
+修改utils / contants.js的常量BASE_IMG_URL;
+× export const BASE_IMG_URL = "http://localhost:5000/manage/img/upload/";
+
+√ export const BASE_IMG_URL = "/base/upload/";
+```
+
+### 26.添加商品失败,后台显示 Error [ValidationError]: products validation failed: pCategoryId: Path `pCategoryId` is required., categoryId: Path `categoryId` is required.at D:\Chrome 下载\尚硅谷前端\谷粒后台资料\code\admin-server_final\routers\index.js:205:15：在商品对象的构造中去掉 categories 属性,添加 categoryId, pCategoryId 属性
+
+```js
+以下代码位于pages / product / addUpdate.jsx  line26;
+const product = { name, desc, price, categoryId, pCategoryId, imgs };
+```

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Card, Form, Input, Cascader, Button } from "antd";
+import { Card, Form, Input, Cascader, Button, message } from "antd";
 import { LeftCircleOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton";
-import { reqCategories } from "../../api/index";
+import { reqCategories, reqAddOrUpdateProduct } from "../../api/index";
 import PicturesWall from "./pictures-wall";
 const { Item } = Form;
 const { TextArea } = Input;
@@ -10,8 +10,32 @@ const { TextArea } = Input;
 export default class ProductAddUpdate extends Component {
   state = { options: [] };
   /* 对收集到的表单数据进行处理 */
-  handleSubmit = (values) => {
-    console.log(values);
+  handleSubmit = async (values) => {
+    // console.log(values);
+    const { name, desc, categoryIds, price } = values;
+    let pCategoryId, categoryId;
+    //数组元素只有一个说明是一级分类
+    if (categoryIds.length === 1) {
+      pCategoryId = "0";
+      categoryId = categoryIds[0];
+    } else {
+      pCategoryId = categoryIds[0];
+      categoryId = categoryIds[1];
+    }
+    const imgs = this.pw.current.getImgs();
+    const product = { name, desc, price, categoryId, pCategoryId, imgs };
+    //如果是更新,还需要添加商品id
+    if (this.isUpdate) {
+      product._id = this.product._id;
+    }
+    const result = await reqAddOrUpdateProduct(product);
+    console.log(result);
+    if (result.data.status === 0) {
+      message.success(`${this.isUpdate ? "更新" : "添加"}商品成功`);
+      this.props.history.goBack();
+    } else {
+      message.error(`${this.isUpdate ? "更新" : "添加"}商品失败`);
+    }
   };
   /* 自定义验证器中的验证价格函数 */
   validatePrice = async (rull, value, callback) => {
@@ -94,6 +118,8 @@ export default class ProductAddUpdate extends Component {
     const product = this.props.location.state;
     this.isUpdate = !!product; //2个!强制转布尔类型值
     this.product = product || {};
+    //创建用来保存ref标识的标签对象的容器
+    this.pw = React.createRef();
   }
 
   /* 注意不要缺少这步 */
@@ -146,11 +172,11 @@ export default class ProductAddUpdate extends Component {
         <Form
           {...layout}
           initialValues={{
-            remember: true,
             name: product.name,
             desc: product.desc,
             price: product.price,
             categoryIds: categoryIds,
+            // imgs: this.pw.current.getImgs(),
           }}
           onFinish={this.handleSubmit}
         >
@@ -190,7 +216,7 @@ export default class ProductAddUpdate extends Component {
             />
           </Item>
           <Item label="商品图片">
-            <PicturesWall />
+            <PicturesWall ref={this.pw} imgs={this.imgs} />
           </Item>
           <Item label="商品详情">
             <div>商品详情</div>
