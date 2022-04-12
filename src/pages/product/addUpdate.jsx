@@ -4,6 +4,7 @@ import { LeftCircleOutlined } from "@ant-design/icons";
 import LinkButton from "../../components/link-buttton";
 import { reqCategories, reqAddOrUpdateProduct } from "../../api/index";
 import PicturesWall from "./pictures-wall";
+import RichTextEditor from "./rich-text-editor";
 const { Item } = Form;
 const { TextArea } = Input;
 
@@ -23,7 +24,16 @@ export default class ProductAddUpdate extends Component {
       categoryId = categoryIds[1];
     }
     const imgs = this.pw.current.getImgs();
-    const product = { name, desc, price, categoryId, pCategoryId, imgs };
+    const detail = this.editor.current.getDetail();
+    const product = {
+      name,
+      desc,
+      price,
+      categoryId,
+      pCategoryId,
+      imgs,
+      detail,
+    };
     //如果是更新,还需要添加商品id
     if (this.isUpdate) {
       product._id = this.product._id;
@@ -120,6 +130,7 @@ export default class ProductAddUpdate extends Component {
     this.product = product || {};
     //创建用来保存ref标识的标签对象的容器
     this.pw = React.createRef();
+    this.editor = React.createRef();
   }
 
   /* 注意不要缺少这步 */
@@ -130,7 +141,7 @@ export default class ProductAddUpdate extends Component {
   render() {
     const { isUpdate, product } = this;
     /* 实现修改商品页面默认分类的选中效果 */
-    const { categoryId, pCategoryId, imgs } = product;
+    const { categoryId, pCategoryId, imgs, detail } = product;
     const categoryIds = [];
     if (isUpdate) {
       //商品是一级分类商品
@@ -218,8 +229,12 @@ export default class ProductAddUpdate extends Component {
           <Item label="商品图片">
             <PicturesWall ref={this.pw} imgs={imgs} />
           </Item>
-          <Item label="商品详情">
-            <div>商品详情</div>
+          <Item
+            label="商品详情"
+            labelCol={{ span: 2 }}
+            wrapperCol={{ span: 20 }}
+          >
+            <RichTextEditor ref={this.editor} detail={detail} />
           </Item>
           <Item>
             <Button type="primary" htmlType="submit">
