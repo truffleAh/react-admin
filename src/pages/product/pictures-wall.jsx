@@ -2,6 +2,7 @@ import React from "react";
 import { Upload, Modal, message } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { BASE_IMG_URL } from "../../utils/constants";
+import { reqDeleteImg } from "../../api";
 
 function getBase64(file) {
   return new Promise((resolve, reject) => {
@@ -48,6 +49,14 @@ export default class PicturesWall extends React.Component {
         file.url = url;
       } else {
         message.error("上传图片失败");
+      }
+    } else if (file.status === "removed") {
+      //删除图片
+      const result = await reqDeleteImg(file.name);
+      if (result.data.status === 0) {
+        message.success("删除图片成功");
+      } else {
+        message.error("删除图片失败");
       }
     }
     this.setState({ fileList });

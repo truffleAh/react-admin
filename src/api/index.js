@@ -79,3 +79,6 @@ export const reqAddOrUpdateProduct = (product) =>
     product,
     "POST"
   );
+//删除图片
+export const reqDeleteImg = (name) =>
+  ajax("/base/manage/img/delete", { name }, "POST");
