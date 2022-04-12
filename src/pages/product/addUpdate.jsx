@@ -130,7 +130,7 @@ export default class ProductAddUpdate extends Component {
   render() {
     const { isUpdate, product } = this;
     /* 实现修改商品页面默认分类的选中效果 */
-    const { categoryId, pCategoryId } = product;
+    const { categoryId, pCategoryId, imgs } = product;
     const categoryIds = [];
     if (isUpdate) {
       //商品是一级分类商品
@@ -216,7 +216,7 @@ export default class ProductAddUpdate extends Component {
             />
           </Item>
           <Item label="商品图片">
-            <PicturesWall ref={this.pw} imgs={this.imgs} />
+            <PicturesWall ref={this.pw} imgs={imgs} />
           </Item>
           <Item label="商品详情">
             <div>商品详情</div>

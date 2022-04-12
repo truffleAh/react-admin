@@ -69,12 +69,11 @@ export default class PicturesWall extends React.Component {
 
   constructor(props) {
     super(props);
-    let fileList = [];
     //如果传入了imgs
     const { imgs } = this.props;
     if (imgs && imgs.length > 0) {
-      fileList = imgs.map((img, index) => ({
-        uid: -index, // 每个file都有自己唯一的id
+      this.state.fileList = imgs.map((img, index) => ({
+        uid: -index, // 每个file都有自己唯一的id,设置为负数防止冲突
         name: img, // 图片文件名
         status: "done", // 图片状态: done-已上传
         url: BASE_IMG_URL + img,
