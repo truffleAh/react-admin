@@ -210,3 +210,13 @@ validatePrice = async (rull, value, callback) => {
 以下代码位于pages / product / addUpdate.jsx  line26;
 const product = { name, desc, price, categoryId, pCategoryId, imgs };
 ```
+
+### 27.role 组件添加角色的实现(role.jsx line52 以及 add-form.jsx)可参考 cartegory 组件添加分类列表(category.jsx line109 以及 add-form.jsx),都是父组件获取子组件表单数据
+
+### 28.role 组件添加角色失败,后台显示 MongooseError [ValidatorError]: Path `name` is required：修改 ajax 请求文件 api/index.js 中 reqAddRole 函数的参数名 name 为 roleName,保持与 API 文档一致
+
+```js
+//添加角色
+export const reqAddRole = (roleName) =>
+  ajax("/base/manage/role/add", { roleName }, "POST");
+```

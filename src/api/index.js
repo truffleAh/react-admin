@@ -85,3 +85,6 @@ export const reqDeleteImg = (name) =>
 
 //获取所有角色列表
 export const reqRoles = () => ajax("/base/manage/role/list");
+//添加角色
+export const reqAddRole = (roleName) =>
+  ajax("/base/manage/role/add", { roleName }, "POST");
