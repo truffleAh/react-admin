@@ -82,3 +82,6 @@ export const reqAddOrUpdateProduct = (product) =>
 //删除图片
 export const reqDeleteImg = (name) =>
   ajax("/base/manage/img/delete", { name }, "POST");
+
+//获取所有角色列表
+export const reqRoles = () => ajax("/base/manage/role/list");
