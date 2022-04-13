@@ -23,6 +23,26 @@ export default class RichTextEditor extends Component {
       convertToRaw(this.state.editorState.getCurrentContent())
     );
   };
+  /* 上传图片的回调 */
+  uploadImageCallBack = (file) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/base/manage/img/upload");
+      const data = new FormData();
+      data.append("image", file);
+      xhr.send(data);
+      xhr.addEventListener("load", () => {
+        const response = JSON.parse(xhr.responseText);
+        const url = response.data.url; //自定义,取出url
+        resolve({ data: { link: url } });
+      });
+      xhr.addEventListener("error", () => {
+        const error = JSON.parse(xhr.responseText);
+        reject(error);
+      });
+    });
+  };
+
   //原有数据的初始展示(html数据对象转换为draft)
   constructor(props) {
     super(props);
@@ -55,6 +75,17 @@ export default class RichTextEditor extends Component {
           paddingLeft: 10,
         }}
         onEditorStateChange={this.onEditorStateChange} //绑定事件监听
+        toolbar={{
+          inline: { inDropdown: true },
+          list: { inDropdown: true },
+          textAlign: { inDropdown: true },
+          link: { inDropdown: true },
+          history: { inDropdown: true },
+          image: {
+            uploadCallback: this.uploadImageCallBack,
+            alt: { present: true, mandatory: true },
+          },
+        }}
       />
     );
   }

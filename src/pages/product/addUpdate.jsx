@@ -39,7 +39,7 @@ export default class ProductAddUpdate extends Component {
       product._id = this.product._id;
     }
     const result = await reqAddOrUpdateProduct(product);
-    console.log(result);
+    // console.log(result);
     if (result.data.status === 0) {
       message.success(`${this.isUpdate ? "更新" : "添加"}商品成功`);
       this.props.history.goBack();
@@ -52,8 +52,8 @@ export default class ProductAddUpdate extends Component {
     if (value > 0) {
       return Promise.resolve();
     } else {
-      return Promise.reject("请输入正确的价格！");
     }
+    return Promise.reject("请输入正确的价格！");
   };
   /* 用于加载下一级列表的回调函数 */
   loadData = async (selectedOptions) => {
