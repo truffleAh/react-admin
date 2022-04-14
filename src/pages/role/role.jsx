@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { Card, Button, Table, Modal, message } from "antd";
 import { reqRoles, reqAddRole } from "../../api";
 import AddForm from "./add-form";
+import AuthForm from "./anth-form";
 
 export default class Role extends Component {
   state = {
     roles: [], //所有角色列表
     role: {}, //选中的role对象
     isShowAdd: false,
+    isShowAuth: false,
   };
 
   intitColums = () => {
@@ -72,6 +74,8 @@ export default class Role extends Component {
       .catch((error) => message.error("请输入角色名称"));
   };
 
+  updateRole = () => {};
+
   handleCancel = () => {};
   constructor(props) {
     super(props);
@@ -83,7 +87,7 @@ export default class Role extends Component {
   }
 
   render() {
-    const { roles, role, isShowAdd } = this.state;
+    const { roles, role, isShowAdd, isShowAuth } = this.state;
     // console.log(isShowAdd);
     const title = (
       <span>
@@ -96,7 +100,13 @@ export default class Role extends Component {
           创建角色
         </Button>
         &nbsp;&nbsp;
-        <Button type="primary" disabled={!role._id}>
+        <Button
+          type="primary"
+          disabled={!role._id}
+          onClick={() => {
+            this.setState({ isShowAuth: true });
+          }}
+        >
           设置角色权限
         </Button>
       </span>
@@ -130,6 +140,17 @@ export default class Role extends Component {
           destroyOnClose //关闭对话框时重置
         >
           <AddForm setForm={(form) => (this.form = form)} />
+        </Modal>
+        <Modal
+          title="设置角色权限"
+          visible={isShowAuth}
+          onOk={this.addRole}
+          onCancel={() => {
+            this.setState({ isShowAuth: false });
+          }}
+          destroyOnClose //关闭对话框时重置
+        >
+          <AuthForm role={role} />
         </Modal>
       </Card>
     );
