@@ -88,3 +88,6 @@ export const reqRoles = () => ajax("/base/manage/role/list");
 //添加角色
 export const reqAddRole = (roleName) =>
   ajax("/base/manage/role/add", { roleName }, "POST");
+//更新角色(给角色设置权限)
+export const reqUpdateRole = (role) =>
+  ajax("/base/manage/role/update", role, "POST");

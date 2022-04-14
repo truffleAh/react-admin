@@ -7,7 +7,8 @@ export default class AuthForm extends Component {
     console.log("selected", selectedKeys, info);
   };
   onCheck = (checkedKeys, info) => {
-    console.log("onCheck", checkedKeys, info);
+    // console.log("onCheck", checkedKeys, info);
+    this.setState({ checkedKeys });
   };
   //准备数据,只渲染一次treeData
   constructor(props) {
@@ -66,11 +67,18 @@ export default class AuthForm extends Component {
         ],
       },
     ];
+    //根据当前选中role的menus生成初始状态
+    const { menus } = this.props.role;
+    this.state = {
+      checkedKeys: menus,
+    };
   }
+  //为父组件role获得当前选中role的最新menus权限列表的方法
+  getMenus = () => this.state.checkedKeys;
 
   render() {
     const { role } = this.props;
-    // const treeData =
+    const { checkedKeys } = this.state;
 
     return (
       <>
@@ -84,7 +92,7 @@ export default class AuthForm extends Component {
           defaultExpandedKeys={["all", "/category", "/charts"]}
           defaultSelectedKeys={[]}
           defaultCheckedKeys={[]}
-          checkedKeys={role.menus}
+          checkedKeys={checkedKeys}
           onSelect={this.onSelect}
           onCheck={this.onCheck}
           treeData={this.treeData}

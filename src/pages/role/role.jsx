@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Card, Button, Table, Modal, message } from "antd";
-import { reqRoles, reqAddRole } from "../../api";
+import { reqRoles, reqAddRole, reqUpdateRole } from "../../api";
 import AddForm from "./add-form";
 import AuthForm from "./anth-form";
+import memoryUtils from "../../utils/memoryUtils";
+import { formatDate } from "../../utils/dateUtils";
 
 export default class Role extends Component {
   state = {
@@ -21,10 +23,12 @@ export default class Role extends Component {
       {
         title: "创建时间",
         dataIndex: "create_time",
+        render: formatDate,
       },
       {
         title: "授权时间",
         dataIndex: "auth_time",
+        render: formatDate,
       },
       {
         title: "授权人",
@@ -73,13 +77,29 @@ export default class Role extends Component {
       })
       .catch((error) => message.error("请输入角色名称"));
   };
-
-  updateRole = () => {};
+  //更新角色
+  updateRole = async () => {
+    const role = this.state.role;
+    const menus = this.auth.current.getMenus();
+    role.menus = menus;
+    role.auth_name = memoryUtils.user.username;
+    role.auth_time = formatDate(Date());
+    const result = await reqUpdateRole(role);
+    if (result.data.status === 0) {
+      message.success("更新角色成功");
+      this.setState({ roles: [...this.state.roles], isShowAuth: false });
+    } else {
+      message.error("更新角色失败");
+      this.setState({ isShowAuth: false });
+    }
+  };
 
   handleCancel = () => {};
+
   constructor(props) {
     super(props);
     this.intitColums();
+    this.auth = React.createRef(); //创建ref容器
   }
   //发送ajax请求获取角色列表
   componentDidMount() {
@@ -144,13 +164,13 @@ export default class Role extends Component {
         <Modal
           title="设置角色权限"
           visible={isShowAuth}
-          onOk={this.addRole}
+          onOk={this.updateRole}
           onCancel={() => {
             this.setState({ isShowAuth: false });
           }}
           destroyOnClose //关闭对话框时重置
         >
-          <AuthForm role={role} />
+          <AuthForm role={role} ref={this.auth} />
         </Modal>
       </Card>
     );
