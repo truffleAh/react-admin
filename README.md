@@ -220,3 +220,45 @@ const product = { name, desc, price, categoryId, pCategoryId, imgs };
 export const reqAddRole = (roleName) =>
   ajax("/base/manage/role/add", { roleName }, "POST");
 ```
+
+### 29.role 组件中对 role 对象 Date()类型数据【创建时间,授权时间】格式转换：需对 antd 官方文档熟悉，借助 render 属性实现
+
+```js
+以下代码位于pages/role/role.jsx line23
+{
+  title: "创建时间",
+  dataIndex: "create_time",
+  render: formatDate,
+},
+{
+  title: "授权时间",
+  dataIndex: "auth_time",
+  render: formatDate,
+},
+```
+
+### 30.user.jsx 组件中,为实现根据每个用户的 role_id 找到对应的角色名称时,控制台报错无法读取 role_id：initRoleName 需要参数 roles,要放在 getUser 函数中初始化,getUser 函数再放到 componentDidMount，而不是直接将 initRoleNames 放到 componentDidMount 钩子中
+
+```js
+getUsers = async () => {
+  const result = await reqUsers();
+  // console.log(result);
+  if (result.data.status === 0) {
+    message.success("获取用户列表成功");
+    const { users, roles } = result.data.data;
+    this.initRoleNames(roles);
+    this.setState({ users, roles });
+  } else {
+    message.error("获取用户列表失败");
+  }
+};
+```
+
+### 31.user.jsx 组件删除用户失败：ajax 函数参数错误,userId 需用{}包裹起来--{uesrId},要传递的是一个对象
+
+```js
+以下代码位于src / api / index.js;
+//删除用户
+export const reqDeleteUser = (userId) =>
+  ajax("/base/manage/user/delete", { userId }, "POST");
+```

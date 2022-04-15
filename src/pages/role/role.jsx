@@ -94,8 +94,6 @@ export default class Role extends Component {
     }
   };
 
-  handleCancel = () => {};
-
   constructor(props) {
     super(props);
     this.intitColums();

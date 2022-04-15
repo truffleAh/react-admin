@@ -91,3 +91,12 @@ export const reqAddRole = (roleName) =>
 //更新角色(给角色设置权限)
 export const reqUpdateRole = (role) =>
   ajax("/base/manage/role/update", role, "POST");
+
+//获取所有用户列表
+export const reqUsers = () => ajax("/base/manage/user/list");
+//添加/修改用户
+export const reqAddOrUpdateUser = (user) =>
+  ajax("/base/manage/user/" + (user._id ? "update" : "add"), user, "POST");
+//删除用户
+export const reqDeleteUser = (userId) =>
+  ajax("/base/manage/user/delete", { userId }, "POST");
