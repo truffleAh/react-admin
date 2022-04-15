@@ -84,6 +84,8 @@ export default class ProductHome extends Component {
   };
   /* 获取指定页码的列表数据显示 */
   getProducts = async (pageNum) => {
+    //保存pageNum
+    this.pageNum = pageNum;
     this.setState({ loading: true }); //显示loading
     const { searchName, searchType } = this.state;
     let result;
@@ -175,6 +177,7 @@ export default class ProductHome extends Component {
           dataSource={products}
           columns={this.columns}
           pagination={{
+            current: this.pageNum,
             defaultPageSize: PAGE_SIZE,
             total,
             showQuickJumper: true,
