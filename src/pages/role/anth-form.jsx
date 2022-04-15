@@ -29,12 +29,12 @@ export default class AuthForm extends Component {
             children: [
               {
                 title: "品类管理",
-                key: "/category",
+                key: "/products/category",
                 disableCheckbox: false,
               },
               {
                 title: "商品管理",
-                key: "/product",
+                key: "/products/product",
               },
             ],
           },
@@ -89,7 +89,7 @@ export default class AuthForm extends Component {
         </Form>
         <Tree
           checkable
-          defaultExpandedKeys={["all", "/category", "/charts"]}
+          defaultExpandedKeys={["all", "/products/category", "/charts"]}
           defaultSelectedKeys={[]}
           defaultCheckedKeys={[]}
           checkedKeys={checkedKeys}

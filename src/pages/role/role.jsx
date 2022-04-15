@@ -4,6 +4,7 @@ import { reqRoles, reqAddRole, reqUpdateRole } from "../../api";
 import AddForm from "./add-form";
 import AuthForm from "./anth-form";
 import memoryUtils from "../../utils/memoryUtils";
+import storageUtils from "../../utils/storageUtils";
 import { formatDate } from "../../utils/dateUtils";
 
 export default class Role extends Component {
@@ -86,10 +87,18 @@ export default class Role extends Component {
     role.auth_time = formatDate(Date());
     const result = await reqUpdateRole(role);
     if (result.data.status === 0) {
-      message.success("更新角色成功");
-      this.setState({ roles: [...this.state.roles], isShowAuth: false });
+      //若更新的是当前角色用户的权限,清理完浏览器登录缓存后强制退出到登录界面
+      if (role._id === memoryUtils.user.role_id) {
+        memoryUtils.user = {};
+        storageUtils.removeUser();
+        this.props.history.replace("/login");
+        message.success("当前用户角色权限已修改,请重新登录");
+      } else {
+        message.success("更新角色权限成功");
+        this.setState({ roles: [...this.state.roles], isShowAuth: false });
+      }
     } else {
-      message.error("更新角色失败");
+      message.error("更新角色权限失败");
       this.setState({ isShowAuth: false });
     }
   };

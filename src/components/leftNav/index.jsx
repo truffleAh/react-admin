@@ -8,6 +8,27 @@ const { SubMenu } = Menu;
 /* 左侧导航组件 */
 
 class LeftNav extends Component {
+  /* 判断当前登录用户的菜单项权限 */
+  hasAuth = (item) => {
+    const { key, isPublic } = item;
+    const { menus } = this.props.user.role;
+    const { username } = this.props.user;
+    /* 四种情况有权限
+    1.当前用户是admin
+    2.当前菜单项item是公开的
+    3.当前用户有此菜单项item的权限：key在menus数组中
+    4.当前用户有此菜单项item的某个子菜单的权限,当前菜单项也需要显示 */
+    if (
+      username === "admin" ||
+      isPublic === true ||
+      menus.indexOf(key) !== -1
+    ) {
+      return true;
+    } else if (item.children) {
+      return !!item.children.find((child) => menus.indexOf(child.key) !== -1);
+    }
+    return false;
+  };
   /* 根据menuList数据动态生成leftNav菜单内容,
   方便后续权限管理(不同用户的权限操作不同,不能写死菜单项)
   实现方法：map()函数【也可用reduce()函数】 + 递归调用 */
@@ -16,19 +37,21 @@ class LeftNav extends Component {
     const path = this.props.location.pathname;
 
     return menuList.map((item) => {
-      if (!item.children) {
-        return (
-          <Menu.Item key={item.key} icon={item.icon}>
-            <Link to={item.key}>{item.title}</Link>
-          </Menu.Item>
-        );
-      } else {
-        //查找一个与当前请求路径匹配的子路径
-        const cItem = item.children.find(
-          (cItem) => path.indexOf(cItem.key) === 0
-        );
-        if (cItem) {
-          this.openKey = item.key;
+      if (this.hasAuth(item)) {
+        if (!item.children) {
+          return (
+            <Menu.Item key={item.key} icon={item.icon}>
+              <Link to={item.key}>{item.title}</Link>
+            </Menu.Item>
+          );
+        } else {
+          //查找一个与当前请求路径匹配的子路径
+          const cItem = item.children.find(
+            (cItem) => path.indexOf(cItem.key) === 0
+          );
+          if (cItem) {
+            this.openKey = item.key;
+          }
         }
 
         return (

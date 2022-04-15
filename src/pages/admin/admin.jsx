@@ -24,7 +24,8 @@ export default class Admin extends Component {
     return (
       <Layout style={{ minHeight: "100%" }}>
         <Sider>
-          <LeftNav />
+          {/* 传入当前登录用户,用于菜单权限管理 */}
+          <LeftNav user={user} />
         </Sider>
         <Layout>
           <Header>Header</Header>
