@@ -14,17 +14,7 @@ const dateFormat = "YYYY/MM/DD";
 const { RangePicker } = DatePicker;
 
 export default class Home extends Component {
-  state = {
-    isVisited: true,
-  };
-
-  handleChange = (isVisited) => {
-    return () => this.setState({ isVisited });
-  };
-
   render() {
-    const { isVisited } = this.state;
-
     return (
       <div className="home">
         <div className="home-header">
